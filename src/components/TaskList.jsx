@@ -9,7 +9,7 @@ const TaskList = ({ tasks, deleteTask, toggleTask, enterEditMode }) => {
     <ul className={styles.tasks}>
       {tasks.sort((a, b) => b.id - a.id).map(task => (
         <TaskItem
-          key={task.id}
+          key={crypto.randomUUID()}
           task={task}
           deleteTask={deleteTask}
           toggleTask={toggleTask}
