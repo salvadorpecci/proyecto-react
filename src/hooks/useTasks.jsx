@@ -27,9 +27,8 @@ export default function useTasks() {
       }
     }
     getData()
-  }
-
-  )
+  }, [])
+  
   const addTaskAction =  async (task) => {
     await createTask(task)
     setTasks(prevState => [...prevState, task])
