@@ -1,1 +1,1 @@
-export const API_URL = 'http://localhost:8080/todos' 
+export const API_URL = 'https://json-server-demo-production-b43c.up.railway.app/todos' 
