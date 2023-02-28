@@ -11,9 +11,10 @@ import { TrashIcon } from '@heroicons/react/24/outline';
 const TaskItem = ({ task, deleteTask, toggleTask, enterEditMode }) => {
   const [isChecked, setIsChecked ] = useState(task.checked);
 
-  const handleCheckboxChange = async (e) =>{
-    setIsChecked(!isChecked);
+  const handleCheckboxChange =  async(e) =>{
     await toggleTask(task);
+    setIsChecked(!isChecked);
+    
   }
 
   return (

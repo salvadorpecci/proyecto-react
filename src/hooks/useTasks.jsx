@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import createTask from "../services/createTask.service"
 import deleteTask from "../services/deleteTask.service"
 import toggleTask from "../services/toggleTask.service"
+import updateTask from "../services/updateTask.service"
 
 
 export default function useTasks() {
@@ -28,7 +29,7 @@ export default function useTasks() {
     }
     getData()
   }, [])
-  
+
   const addTaskAction =  async (task) => {
     await createTask(task)
     setTasks(prevState => [...prevState, task])
@@ -41,18 +42,19 @@ export default function useTasks() {
   }
 
   const toggleTaskAction = async (task) => {
-   await toggleTask(task)
+   const updatedTask = await toggleTask(task)
     setTasks(prevState => prevState.map(t => (
       t.id === task.id
-        ? { ...t, checked: !t.checked }
+        ? updatedTask
         : t
     )))
   }
 
-  const updateTask = (task) => {
+  const updateTaskAction = async (task) => {
+    const updatedTask = await updateTask(task)
     setTasks(prevState => prevState.map(t => (
       t.id === task.id
-        ? { ...t, name: task.name }
+        ? updatedTask
         : t
     )))
   }
@@ -61,7 +63,7 @@ export default function useTasks() {
     addTask: addTaskAction,
     deleteTask: deleteTaskAction,
     toggleTask: toggleTaskAction,
-    updateTask
+    updateTask: updateTaskAction
   }
 
   return [tasks, actions, isLoading, error]

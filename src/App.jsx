@@ -37,8 +37,8 @@ function App() {
         isEditing && (
           <EditForm
             editedTask={editedTask}
-            updateTask={() => { 
-              updateTask();
+            updateTask={(updatedTask) => { 
+              updateTask(updatedTask);
               closeEditMode();
             }}
             closeEditMode={closeEditMode}
