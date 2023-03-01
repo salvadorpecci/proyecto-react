@@ -1,9 +1,5 @@
 import { useState } from 'react'
 
-// custom hooks
-import useLocalStorage from './hooks/useLocalStorage'
-
-// custom components
 import CustomForm from './components/CustomForm'
 import EditForm from './components/EditForm'
 import TaskList from './components/TaskList'
@@ -46,7 +42,16 @@ function App() {
         )
       }
       <CustomForm addTask={addTask}/>
-      {tasks && (
+
+      {
+        error.length !== 0 && <h1>{error}</h1>
+      }
+
+      {
+        isLoading && <h1>Loading...</h1>
+      }
+
+      {!isLoading && error.length === 0 && tasks && (
         <TaskList
           tasks={tasks}
           deleteTask={deleteTask}
