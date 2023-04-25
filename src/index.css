@@ -12,6 +12,10 @@ button {
   cursor: pointer;
 }
 
+#root {
+  width: 100%;
+}
+
 input,
 label {
   font: inherit;
@@ -114,10 +118,15 @@ h1 {
 }
 
 .container {
-  margin: 4vmax max(calc((100vw - 70rem) / 2), 1.5rem) 6em;
   display: grid;
   gap: clamp(2rem, 3.5vmax, 8rem);
   text-align: center;
+  width: 80vw;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  word-break: break-word;
+  /* margin: 4vmax max(calc((100vw - 70rem) / 2), 1.5rem) 6em; */
+  margin: auto;
 }
 
 hr {
@@ -199,7 +208,7 @@ hr {
 .input {
   border: none;
   border-radius: var(--_radius);
-  padding: 0.35em 0.55em;
+  padding: .35em .55em;
   width: 100%;
   background-color: hsl(var(--muted));
   caret-color: hsl(var(--accent));

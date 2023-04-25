@@ -14,28 +14,25 @@ function Main() {
   const [isEditing, setIsEditing] = useState(false);
 
   const closeEditMode = () => {
-    setIsEditing(false);
-    previousFocusEl.focus();
+    setIsEditing(false)
+    previousFocusEl.focus()
   }
 
   const enterEditMode = (task) => {
-    setEditedTask(task);
-    setIsEditing(true);
+    setEditedTask(task)
+    setIsEditing(true)
     setPreviousFocusEl(document.activeElement);
   }
 
   return (
     <div className="container">
-      <header>
-        <h1>My Task List</h1>
-      </header>
       {
         isEditing && (
           <EditForm
             editedTask={editedTask}
             updateTask={(updatedTask) => { 
-              updateTask(updatedTask);
-              closeEditMode();
+              updateTask(updatedTask)
+              closeEditMode()
             }}
             closeEditMode={closeEditMode}
           />

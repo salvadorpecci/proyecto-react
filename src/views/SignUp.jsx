@@ -1,22 +1,23 @@
 import { useState } from "react"
-import  useLogin  from '../hooks/useLogin'
+import useSignUp from '../hooks/useSignUp'
 import './login.module.css'
 import styles from '../components/TaskItem.module.css'
 
-export default function Login () {
+export default function SignUp () {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const { login, error, isLoading } = useLogin()
+    const [confirmPassword, setConfirmPassword] = useState('')
+    const { signUp, error, isLoading } = useSignUp()
 
     const inputStyles = {
         maxWidth: '340px',
-        marginBottom: '.2rem',
+        marginBottom: '.5rem',
         fontSize: '1rem'
     }
 
     function handleSubmit (e) {
         e.preventDefault()
-        login(email, password)
+        signUp(email, password, confirmPassword)
     }
 
     return (
@@ -39,6 +40,16 @@ export default function Login () {
             name="password" 
             id="password"
             placeholder="password"/>
+
+            <input
+            style={inputStyles}
+            className={styles.task}
+            value = {confirmPassword}
+            onChange={e => setConfirmPassword(e.target.value)}
+            type="password"
+            name="confirm-password" 
+            id="confirm-password"
+            placeholder="confirm password"/>
             
             <button
                 className={styles.task} 
@@ -47,7 +58,7 @@ export default function Login () {
                     fontSize: '1rem'
                 }}
             >
-                    Login
+                    Sign Up
             </button>
 
             <span className={styles.error}>{error}</span>

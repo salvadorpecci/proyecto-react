@@ -1,0 +1,7 @@
+form {
+  max-height: 100vh;
+  margin: auto;
+  display: grid;
+  place-items: center;
+  
+}

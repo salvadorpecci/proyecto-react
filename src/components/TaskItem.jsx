@@ -9,7 +9,7 @@ import { PencilSquareIcon  } from '@heroicons/react/24/outline';
 import { TrashIcon } from '@heroicons/react/24/outline';
 
 const TaskItem = ({ task, deleteTask, toggleTask, enterEditMode }) => {
-  const [isChecked, setIsChecked ] = useState(task.checked);
+  const [isChecked, setIsChecked ] = useState(task.finished);
 
   const handleCheckboxChange =  async(e) =>{
     await toggleTask(task);
@@ -26,13 +26,13 @@ const TaskItem = ({ task, deleteTask, toggleTask, enterEditMode }) => {
           checked={isChecked}
           onChange={handleCheckboxChange}
           name={task.name}
-          id={task.id}
+          id={task._id}
         />
         <label
-          htmlFor={task.id}
+          htmlFor={task._id}
           className={styles.label}
         >
-          {task.name}
+          {task.name} {task.deadline == null ? '' : task.deadline}
           <p className={styles.checkmark}>
             <CheckIcon strokeWidth={2} width={24} height={24}/>
           </p>
@@ -50,7 +50,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, enterEditMode }) => {
         <button
           className={`btn ${styles.delete}`}
           aria-label={`Delete ${task.name} Task`}
-          onClick={() => deleteTask(task.id)}
+          onClick={() => deleteTask(task._id)}
         >
           <TrashIcon width={24} height={24} />
         </button>

@@ -1,13 +1,15 @@
 import { API_URL } from '../config.js'
 
-export default async function toggleTask(task) {
-    task.checked = !task.checked
+
+export default async function toggleTask(token, task) {
+    task.finished = !task.finished
     const json = JSON.stringify(task)
 
-    const response = await fetch( `${API_URL}/${task.id}`  , {
+    const response = await fetch( `${API_URL}/task/${task._id}`  , {
         method: "PUT",
         headers: {
-            "Content-Type": 'application/json'
+            "Content-Type": 'application/json',
+            Authorization: `Bearer ${token}`
         },
 
         body: json
