@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 // library imports
-import { CheckIcon } from '@heroicons/react/24/solid'
+import { CheckIcon, CalendarIcon } from '@heroicons/react/24/solid'
 
 const EditForm = ({ editedTask, updateTask, closeEditMode }) => {
   const [updatedTaskName, setUpdatedTaskName] = useState(editedTask.name);
+  const [updatedTaskDate, setUpdatedTaskDate] = useState(editedTask.deadline ?? '')
+  const inputRef = useRef(null)
 
   useEffect(()=> {
     const closeModalIfEscaped = (e) => {
@@ -20,7 +22,7 @@ const EditForm = ({ editedTask, updateTask, closeEditMode }) => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    updateTask({...editedTask, name: updatedTaskName})
+    updateTask({...editedTask, name: updatedTaskName, deadline: updatedTaskDate.length === 0 ? null : updatedTaskDate})
   }
 
   return (
@@ -49,7 +51,26 @@ const EditForm = ({ editedTask, updateTask, closeEditMode }) => {
             htmlFor="editTask"
             className="label"
           >Update Task</label>
+          <input
+            className='input'
+            type='date'
+            id='date-edit'
+            value={updatedTaskDate}
+            defaultValue={updatedTaskDate}
+            onChange={e => setUpdatedTaskDate(e.target.value)}   
+            ref={inputRef}
+            style={{
+              display: 'none'
+            }}
+        />
         </div>
+
+        <label
+          className='btn'
+          arie-label='Add Date'
+          onClick={() => inputRef.current.showPicker()}>
+          <CalendarIcon />
+        </label>
         <button
           className="btn"
           aria-label={`Confirm edited task to now read ${updatedTaskName}`}
