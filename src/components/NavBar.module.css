@@ -14,3 +14,34 @@ header a{
 header a:visited {
     color:var(--txt) ;
 }
+
+.mx5 {
+    margin: 0 1.25rem;
+}
+
+.desktopMenu {
+    display: none;
+}
+
+.relative {
+    position: relative;
+}
+
+.noUserActions {
+    display: flex;
+    flex-direction: column;
+}
+
+@media screen and (min-width: 720px) {
+    .hamburger {
+        display: none;
+    }
+
+    .noUserActions {
+        flex-direction: row;
+    }
+
+    .desktopMenu {
+        display: initial;
+    }
+}

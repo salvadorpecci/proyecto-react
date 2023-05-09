@@ -41,7 +41,7 @@ export default function Login () {
             placeholder="password"/>
             
             <button
-                className={styles.task} 
+                className='btn' 
                 disabled={isLoading}
                 style={{
                     fontSize: '1rem'

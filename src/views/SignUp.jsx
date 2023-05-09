@@ -52,7 +52,7 @@ export default function SignUp () {
             placeholder="confirm password"/>
             
             <button
-                className={styles.task} 
+                className='btn' 
                 disabled={isLoading}
                 style={{
                     fontSize: '1rem'
