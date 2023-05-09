@@ -13,9 +13,13 @@ export default function useTasks() {
   const [tasks, setTasks] = useState([])
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(true)
-  const { authState } = useContext(AuthContext)
+  const { authState, authDispatch } = useContext(AuthContext)
   const token = authState.user.token
 
+
+  function logout () {
+    authDispatch({ type: 'LOGOUT', payload: null })
+  }
 
   useEffect(() => {
     async function getData() {
@@ -29,7 +33,13 @@ export default function useTasks() {
       return await response.json()
     }
     getData()
-      .then(data => setTasks(data.map(task => {return { ...task, deadline: task.deadline == null ? null : moment.utc(task.deadline).local().format('YYYY-MM-DD') }})))
+    .then(data => {
+      if (data?.message !== 'Unauthorized request') {
+          setTasks(data.map(task => {return { ...task, deadline: task.deadline == null ? null : moment.utc(task.deadline).local().format('YYYY-MM-DD') }}))
+        } else {
+          logout()
+        }
+      })
       .catch(err => setError(err.message))
       .finally(() => setIsLoading(false))
   }, [])
@@ -38,6 +48,12 @@ export default function useTasks() {
     try {
       setIsLoading(true)
       const createdTask = await createTask(token, task)
+      
+      if (createdTask?.message === 'Unauthorized request') {
+        logout()
+        return
+      }
+
       createdTask.task.deadline = createdTask.task.deadline == null ? null : moment.utc(task.deadline).local().format('YYYY-MM-DD')
 
       setError('')
@@ -54,7 +70,12 @@ export default function useTasks() {
   const deleteTaskAction = async (id) => {
     try {
       setIsLoading(true)
-      await deleteTask(token, id)
+      const deletedTask = await deleteTask(token, id)
+
+      if (deletedTask?.message === 'Unauthorized request') {
+        logout()
+        return
+      }
 
       setError('')
       setTasks(prevState => prevState.filter(t => t._id !== id))
@@ -73,6 +94,12 @@ export default function useTasks() {
     try {
       setIsLoading(true)
       const updatedTask = await toggleTask(token, task)
+
+      if (updatedTask?.message === 'Unauthorized request') {
+        logout()
+        return
+      }
+
       updatedTask.deadline = updatedTask.deadline == null ? null : moment.utc(task.deadline).local().format('YYYY-MM-DD')
 
       setError('')
@@ -94,7 +121,14 @@ export default function useTasks() {
 
     try {
       setIsLoading(true)
+      
       const updatedTask = await updateTask(token, task)
+
+      if (updatedTask?.message === 'Unauthorized request') {
+        logout()
+        return
+      }
+
       updatedTask.deadline = updatedTask.deadline == null ? null : moment.utc(task.deadline).local().format('YYYY-MM-DD')
 
       setError('')
