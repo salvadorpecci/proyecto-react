@@ -4,6 +4,7 @@ import CustomForm from '../components/CustomForm'
 import EditForm from '../components/EditForm'
 import TaskList from '../components/TaskList'
 import useTasks from '../hooks/useTasks'
+import ErrorHandler from '../components/ErrorHandler'
 
 function Main() {
   const [tasks, actions, isLoading, error] = useTasks();
@@ -41,7 +42,7 @@ function Main() {
       <CustomForm addTask={addTask}/>
 
       {
-        error.length !== 0 && <h1>{error}</h1>
+        error.length !== 0 && <ErrorHandler error={error} />
       }
 
       {

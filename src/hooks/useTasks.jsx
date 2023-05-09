@@ -6,7 +6,7 @@ import updateTask from "../services/updateTask.service"
 import moment from 'moment'
 
 import { API_URL } from "../config"
-import { AuthContext, authReducer } from "../contexts/Auth"
+import { AuthContext } from "../contexts/Auth"
 
 
 export default function useTasks() {
@@ -34,11 +34,17 @@ export default function useTasks() {
     }
     getData()
     .then(data => {
-      if (data?.message !== 'Unauthorized request') {
-          setTasks(data.map(task => {return { ...task, deadline: task.deadline == null ? null : moment.utc(task.deadline).local().format('YYYY-MM-DD') }}))
-        } else {
-          logout()
-        }
+      if (data?.message === 'Unauthorized request') {
+        logout()
+        return
+      } 
+      
+      if (data.message) {
+        setError(data.message)
+        return
+      }
+
+      setTasks(data.map(task => {return { ...task, deadline: task.deadline == null ? null : moment.utc(task.deadline).local().format('YYYY-MM-DD') }}))
       })
       .catch(err => setError(err.message))
       .finally(() => setIsLoading(false))
@@ -51,6 +57,11 @@ export default function useTasks() {
       
       if (createdTask?.message === 'Unauthorized request') {
         logout()
+        return
+      }
+
+      if (createdTask.message) {
+        setError(createdTask.message)
         return
       }
 
@@ -77,6 +88,11 @@ export default function useTasks() {
         return
       }
 
+      if (deletedTask.message) {
+        setError(deletedTask.message)
+        return
+      }
+
       setError('')
       setTasks(prevState => prevState.filter(t => t._id !== id))
 
@@ -97,6 +113,11 @@ export default function useTasks() {
 
       if (updatedTask?.message === 'Unauthorized request') {
         logout()
+        return
+      }
+
+      if (updatedTask.message) {
+        setError(updatedTask.message)
         return
       }
 
@@ -126,6 +147,11 @@ export default function useTasks() {
 
       if (updatedTask?.message === 'Unauthorized request') {
         logout()
+        return
+      }
+
+      if (updatedTask.message) {
+        setError(updatedTask.message)
         return
       }
 
