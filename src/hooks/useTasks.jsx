@@ -1,104 +1,169 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import createTask from "../services/createTask.service"
 import deleteTask from "../services/deleteTask.service"
 import toggleTask from "../services/toggleTask.service"
 import updateTask from "../services/updateTask.service"
+import moment from 'moment'
 
 import { API_URL } from "../config"
+import { AuthContext } from "../contexts/Auth"
 
 
 export default function useTasks() {
-  const [tasks, setTasks] = useState([])  
+  const [tasks, setTasks] = useState([])
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(true)
+  const { authState, authDispatch } = useContext(AuthContext)
+  const token = authState.user.token
 
+
+  function logout () {
+    authDispatch({ type: 'LOGOUT', payload: null })
+  }
 
   useEffect(() => {
     async function getData() {
-      try {
-        const response = await fetch(API_URL)
-        const data = await response.json()
 
-        setError('')
-        setIsLoading(false)
+      const response = await fetch(`${API_URL}/task`, {
+        headers: {
+          Authorization: `Bearer ${authState.user.token}`
+        }
+      })
 
-        setTasks(data)
-
-      }
-      catch (error) {
-        setError(error.message)
-      }
+      return await response.json()
     }
     getData()
+    .then(data => {
+      if (data?.message === 'Unauthorized request') {
+        logout()
+        return
+      } 
+      
+      if (data.message) {
+        setError(data.message)
+        return
+      }
+
+      setTasks(data.map(task => {return { ...task, deadline: task.deadline == null ? null : moment.utc(task.deadline).local().format('YYYY-MM-DD') }}))
+      })
+      .catch(err => setError(err.message))
+      .finally(() => setIsLoading(false))
   }, [])
 
-  const addTaskAction =  async (task) => {
+  const addTaskAction = async (task) => {
     try {
       setIsLoading(true)
-      await createTask(task)
+      const createdTask = await createTask(token, task)
+      
+      if (createdTask?.message === 'Unauthorized request') {
+        logout()
+        return
+      }
+
+      if (createdTask.message) {
+        setError(createdTask.message)
+        return
+      }
+
+      createdTask.task.deadline = createdTask.task.deadline == null ? null : moment.utc(task.deadline).local().format('YYYY-MM-DD')
 
       setError('')
-      setTasks(prevState => [...prevState, task])
+      setTasks(prevState => [...prevState, createdTask.task])
 
-    } catch(e) {
+    } catch (e) {
       setError(e.message)
     } finally {
       setIsLoading(false)
     }
-    
+
   }
 
   const deleteTaskAction = async (id) => {
     try {
       setIsLoading(true)
-      await deleteTask(id)
+      const deletedTask = await deleteTask(token, id)
+
+      if (deletedTask?.message === 'Unauthorized request') {
+        logout()
+        return
+      }
+
+      if (deletedTask.message) {
+        setError(deletedTask.message)
+        return
+      }
 
       setError('')
-      setTasks(prevState => prevState.filter(t => t.id !== id))
+      setTasks(prevState => prevState.filter(t => t._id !== id))
 
-    } catch(e) {
+    } catch (e) {
       setError(e.message)
     } finally {
       setIsLoading(false)
     }
-   
-    
+
+
   }
 
   const toggleTaskAction = async (task) => {
 
     try {
       setIsLoading(true)
-      const updatedTask = await toggleTask(task)
+      const updatedTask = await toggleTask(token, task)
+
+      if (updatedTask?.message === 'Unauthorized request') {
+        logout()
+        return
+      }
+
+      if (updatedTask.message) {
+        setError(updatedTask.message)
+        return
+      }
+
+      updatedTask.deadline = updatedTask.deadline == null ? null : moment.utc(task.deadline).local().format('YYYY-MM-DD')
 
       setError('')
       setTasks(prevState => prevState.map(t => (
-        t.id === task.id
+        t._id === task._id
           ? updatedTask
           : t
       )))
     }
-    catch(e) {
+    catch (e) {
       setError(e.message)
-    }finally {
+    } finally {
       setIsLoading(false)
     }
-   
+
   }
 
   const updateTaskAction = async (task) => {
 
-    try{
+    try {
       setIsLoading(true)
-      const updatedTask = await updateTask(task)
+      
+      const updatedTask = await updateTask(token, task)
+
+      if (updatedTask?.message === 'Unauthorized request') {
+        logout()
+        return
+      }
+
+      if (updatedTask.message) {
+        setError(updatedTask.message)
+        return
+      }
+
+      updatedTask.deadline = updatedTask.deadline == null ? null : moment.utc(task.deadline).local().format('YYYY-MM-DD')
 
       setError('')
       setTasks(prevState => prevState.map(t => (
-        t.id === task.id
-          ? updatedTask
-          : t
+        t._id === updatedTask._id
+        ? updatedTask
+        : t
       )))
-    }catch (e){
+    } catch (e) {
       setError(e.message)
     } finally {
       setIsLoading(false)

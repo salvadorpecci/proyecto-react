@@ -1,66 +1,34 @@
-import { useState } from 'react'
-
-import CustomForm from './components/CustomForm'
-import EditForm from './components/EditForm'
-import TaskList from './components/TaskList'
-import useTasks from './hooks/useTasks'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import SignUp from './views/SignUp'
+import Login from './views/Login'
+import Main from './views/Main'
+import NavBar from './components/NavBar'
+import { useContext } from 'react'
+import { AuthContext } from './contexts/Auth'
+import useLogin from './hooks/useLogin'
 
 function App() {
-  const [tasks, actions, isLoading, error] = useTasks();
-  const { addTask, deleteTask, toggleTask, updateTask  } = actions;
-   
-  const [previousFocusEl, setPreviousFocusEl] = useState(null);
-  const [editedTask, setEditedTask] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
-
-  const closeEditMode = () => {
-    setIsEditing(false);
-    previousFocusEl.focus();
-  }
-
-  const enterEditMode = (task) => {
-    setEditedTask(task);
-    setIsEditing(true);
-    setPreviousFocusEl(document.activeElement);
-  }
+  const { authState } = useContext(AuthContext)
+  const userIsLogged = () => authState.user != null
+  const { isLoading } = useLogin()
 
   return (
-    <div className="container">
-      <header>
-        <h1>My Task List</h1>
-      </header>
+    <BrowserRouter>
+      <NavBar/>
       {
-        isEditing && (
-          <EditForm
-            editedTask={editedTask}
-            updateTask={(updatedTask) => { 
-              updateTask(updatedTask);
-              closeEditMode();
-            }}
-            closeEditMode={closeEditMode}
-          />
-        )
+        isLoading
+        ? <p>Spinner o yo que sé</p>
+        : (
+          <Routes>
+            <Route path='/' element = {userIsLogged() ? <Main/> : <Navigate to={'/login'}/>} />
+            <Route path='/login' element = {userIsLogged() ? <Navigate to={'/'}/> : <Login/>}/>
+            <Route path='/signUp' element = {userIsLogged() ? <Navigate to={'/'}/> : <SignUp/>}/>
+          </Routes>
+          )
       }
-      <CustomForm addTask={addTask}/>
-
-      {
-        error.length !== 0 && <h1>{error}</h1>
-      }
-
-      {
-        isLoading && <h1>Loading...</h1>
-      }
-
-      {!isLoading && error.length === 0 && tasks && (
-        <TaskList
-          tasks={tasks}
-          deleteTask={deleteTask}
-          toggleTask={toggleTask}
-          enterEditMode={enterEditMode}
-        />
-      )}
-    </div>
+    </BrowserRouter>
   )
+
 }
 
 export default App

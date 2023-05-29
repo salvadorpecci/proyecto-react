@@ -1,21 +1,22 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react'
 
 // library imports
-import { PlusIcon } from '@heroicons/react/24/solid'
+import { PlusIcon, CalendarIcon } from '@heroicons/react/24/solid'
 
 const CustomForm = ({ addTask }) => {
   const [task, setTask] = useState("");
-
-
+  const [date, setDate] = useState('');
+  const inputRef = useRef(null)
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
     addTask({
       name: task,
-      checked: false,
-      id: Date.now()
+      finished: false,
+      deadline: date.length === 0 ? null : date
     })
-    setTask("")
+    setTask('')
+    setDate('')
   }
 
   return (
@@ -39,7 +40,26 @@ const CustomForm = ({ addTask }) => {
           htmlFor="task"
           className="label"
         >Enter Task</label>
+      <input
+          className='input'
+          type='date'
+          id='date'
+          value={date}
+          onChange={e => setDate(e.target.value)}   
+          ref={inputRef}
+          style={{
+            display: 'none'
+          }}
+        />
       </div>
+      
+      <label
+        className='btn'
+        arie-label='Add Date'
+        onClick={() => inputRef.current.showPicker()}>
+        <CalendarIcon />
+      </label>
+
       <button
         className="btn"
         aria-label="Add Task"
