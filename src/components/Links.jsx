@@ -1,7 +1,6 @@
 import { useContext } from "react"
 import { AuthContext } from "../contexts/Auth"
 import { Link } from "react-router-dom"
-import styles from './Navbar.module.css'
 
 export default function Links({ setIsNavOpen }) {
   const { authState, authDispatch } = useContext(AuthContext)
@@ -18,7 +17,7 @@ export default function Links({ setIsNavOpen }) {
         authState.user == null
           ?
           (
-            <span className={styles.noUserActions}>
+            <span className='noUserActions'>
               <Link to={'/login'} onClick={() => setIsNavOpen && setIsNavOpen(prev => !prev)} style={{
                 margin: '.25rem'
               }}><button style={btnStyles} className='btn'>Login</button></Link>
@@ -30,7 +29,7 @@ export default function Links({ setIsNavOpen }) {
           :
           <>
             <span>{authState.user.email}</span>
-            <span className={styles.mx5} />
+            <span className='mx5' />
             <button style={{
               display: 'inline'
             }} className='btn' onClick={() => authDispatch({ type: 'LOGOUT' })}>Logout</button>

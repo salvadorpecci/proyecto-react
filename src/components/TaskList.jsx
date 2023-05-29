@@ -1,8 +1,4 @@
-// component import
 import TaskItem from './TaskItem'
-
-// styles
-import styles from './TaskList.module.css'
 
 const TaskList = ({ tasks, deleteTask, toggleTask, enterEditMode }) => {
   if(!Array.isArray(tasks)) {
@@ -10,7 +6,7 @@ const TaskList = ({ tasks, deleteTask, toggleTask, enterEditMode }) => {
   }
  /*Falta ordenar por fecha */
   return (
-    <ul className={styles.tasks}>
+    <ul className='tasks'>
      
       {tasks.map(task => {
         return <TaskItem
