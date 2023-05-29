@@ -1,5 +1,4 @@
 import Links from './Links'
-import styles from './Navbar.module.css'
 
 export default function MobileLinks ({ isNavOpen, setIsNavOpen }) {
   const classes = `mobileLinks ${isNavOpen ? '' : 'none'}`
