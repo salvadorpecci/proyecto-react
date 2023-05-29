@@ -1,9 +1,4 @@
 import { useState } from 'react';
-
-// styles
-import styles from './TaskItem.module.css';
-
-// Library imports
 import { CheckIcon  } from '@heroicons/react/24/outline';
 import { PencilSquareIcon  } from '@heroicons/react/24/outline';
 import { TrashIcon } from '@heroicons/react/24/outline';
@@ -18,27 +13,27 @@ const TaskItem = ({ task, deleteTask, toggleTask, enterEditMode }) => {
   }
 
   return (
-    <li className={styles.task}>
-      <div className={styles["task-group"]}>
+    <li className='task'>
+      <div className="task-group">
         <input
           type="checkbox"
-          className={styles.checkbox}
+          className='checkbox'
           checked={isChecked}
           onChange={handleCheckboxChange}
-          name={task.name}
+          name='name'
           id={task._id}
         />
         <label
           htmlFor={task._id}
-          className={styles.label}
+          className='label'
         >
           {task.name} {task.deadline == null ? '' : task.deadline}
-          <p className={styles.checkmark}>
+          <p className='checkmark'>
             <CheckIcon strokeWidth={2} width={24} height={24}/>
           </p>
         </label>
       </div>
-      <div className={styles["task-group"]}>
+      <div className="task-group">
         <button
           className='btn'
           aria-label={`Update ${task.name} Task`}
@@ -48,7 +43,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, enterEditMode }) => {
         </button>
 
         <button
-          className={`btn ${styles.delete}`}
+          className='btn delete'
           aria-label={`Delete ${task.name} Task`}
           onClick={() => deleteTask(task._id)}
         >

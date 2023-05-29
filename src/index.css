@@ -407,3 +407,11 @@ header a:visited {
   font-size: var(--_size);
   text-align: center;
 }
+
+.login {
+  max-height: 100vh;
+  margin: auto;
+  display: grid;
+  place-items: center;
+  
+}

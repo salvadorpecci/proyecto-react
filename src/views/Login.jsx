@@ -1,7 +1,5 @@
 import { useState } from "react"
 import  useLogin  from '../hooks/useLogin'
-import './login.module.css'
-import styles from '../components/TaskItem.module.css'
 
 export default function Login () {
     const [email, setEmail] = useState('')
@@ -20,9 +18,9 @@ export default function Login () {
     }
 
     return (
-        <form onSubmit={handleSubmit}> 
+        <form onSubmit={handleSubmit} className="login"> 
             <input style={inputStyles}
-            className={styles.task}
+            className='task'
             value={email}
             onChange={e => setEmail(e.target.value)} 
             type="email" 
@@ -32,7 +30,7 @@ export default function Login () {
 
             <input
             style={inputStyles}
-            className={styles.task}
+            className='task'
             value = {password}
             onChange={e => setPassword(e.target.value)}
             type="password"
@@ -50,7 +48,7 @@ export default function Login () {
                     Login
             </button>
 
-            <span className={styles.error}>{error}</span>
+            <span className='error'>{error}</span>
         </form>
     )
 }
